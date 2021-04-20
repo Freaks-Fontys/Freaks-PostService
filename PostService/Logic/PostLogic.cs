@@ -7,5 +7,6 @@ namespace PostService.Logic
 {
     public class PostLogic : IPostLogic
     {
+
     }
 }
