@@ -12,5 +12,8 @@ namespace PostService.Models
         public string Title { get; set; }
         public long Description { get; set; }
         public string ImageURL { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime DeletedAt { get; set; }
     }
 }
