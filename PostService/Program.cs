@@ -18,7 +18,7 @@ namespace PostService
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
 
-            channel.QueueDeclare("demo-queue",
+            channel.QueueDeclare("post",
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
@@ -34,7 +34,7 @@ namespace PostService
                 Console.WriteLine(message);
             };
 
-            channel.BasicConsume("demo-queue", true, consumer);
+            channel.BasicConsume("post", true, consumer);
             Console.ReadLine();
         }
     }
