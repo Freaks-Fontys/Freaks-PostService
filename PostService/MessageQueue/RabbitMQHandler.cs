@@ -13,12 +13,12 @@ namespace PostService.MessageQueue
         IConnectionFactory factory;
         IConnection connection;
         IModel channel;
-        string _channelName;
+        string _queueName;
 
 
-        public RabbitMQHandler(string channelName)
+        public RabbitMQHandler(string queueName)
         {
-            _channelName = channelName;
+            _queueName = queueName;
             SetupMQ();
         }
 
@@ -33,7 +33,7 @@ namespace PostService.MessageQueue
             connection = factory.CreateConnection();
             channel = connection.CreateModel();
 
-            channel.QueueDeclare(_channelName,
+            channel.QueueDeclare(_queueName,
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
@@ -44,7 +44,7 @@ namespace PostService.MessageQueue
         {
             var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
-            channel.BasicPublish("", _channelName, null, body);
+            channel.BasicPublish("", _queueName, null, body);
         }
     }
 }

@@ -14,13 +14,14 @@ namespace PostService.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        PostDbContext _context = new PostDbContext();
-        RabbitMQHandler mQHandler = new RabbitMQHandler("post");
+        PostDbContext _context;
+        RabbitMQHandler mQHandler;
 
 
         public PostController()
         {
-
+            _context = new PostDbContext();
+            mQHandler = new RabbitMQHandler("post");
         }
 
         [HttpGet("{id:length(24)}", Name = "GetPost")]
@@ -42,7 +43,6 @@ namespace PostService.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Post post)
         {
-            PostDbContext _context = new PostDbContext();
             _context.Posts.Add(post);
 
             try
