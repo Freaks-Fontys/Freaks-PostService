@@ -9,25 +9,24 @@ namespace PostService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostController : ControllerBase
+    public class CommentController : ControllerBase
     {
         PostDbContext _context;
         RabbitMQHandler mQHandler;
 
-
-        public PostController()
+        public CommentController()
         {
             _context = new PostDbContext();
-            //mQHandler = new RabbitMQHandler("post");
+            //mQHandler = new RabbitMQHandler("comment");
         }
 
-        [HttpGet("{id:length(24)}", Name = "GetPost")]
-        public ActionResult<Post> Get(string id)
+        [HttpGet("{id:length(24)}", Name = "GetComment")]
+        public ActionResult<Comment> Get(string id)
         {
             try
             {
-                Post p = _context.Posts.Find(id);
-                return Ok(p);
+                Comment c = _context.Comments.Find(id);
+                return Ok(c);
             }
             catch (Exception ex)
             {
@@ -38,31 +37,31 @@ namespace PostService.Controllers
         //TODO: Validate FromBody with logic classes too
         //TODO: Make the SendMessage asynchronuous
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Post post)
+        public async Task<IActionResult> Create([FromBody] Comment comment)
         {
-            _context.Posts.Add(post);
+            _context.Comments.Add(comment);
 
             try
             {
-                Post newPost = _context.Posts.Find(post.Id);
-                newPost.CreatedAt = DateTime.Now;
-                mQHandler.SendMessage(newPost);
-                return Created($"Posts/{newPost.Id}", newPost);
+                Post newComment = _context.Comments.Find(comment.Id);
+                newComment.CreatedAt = DateTime.Now;
+                mQHandler.SendMessage(newComment);
+                return Created($"Comments/{newComment.Id}", newComment);
             }
-            catch(Exception)
+            catch (Exception)
             {
-                return StatusCode(500, post);
+                return StatusCode(500, comment);
             }
         }
-        
-        [HttpDelete("{id:length(24)}", Name = "DeletePost")]
+
+        [HttpDelete("{id:length(24)}", Name = "DeleteComment")]
         public ActionResult<Post> Delete(string id)
         {
             try
             {
-                Post p = _context.Posts.Find(id);
-                p.DeletedAt = DateTime.Now;
-                return Ok(p);
+                Comment c = _context.Comments.Find(id);
+                c.DeletedAt = DateTime.Now;
+                return Ok(c);
             }
             catch (Exception ex)
             {

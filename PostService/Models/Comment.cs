@@ -7,6 +7,6 @@ namespace PostService.Models
 {
     public class Comment : Post
     {
-
+        public string PostId { get; set; }
     }
 }
