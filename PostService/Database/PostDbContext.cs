@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PostService.Models;
-using System;
+
 namespace PostService.Database
 {
     public class PostDbContext : DbContext
@@ -8,10 +8,10 @@ namespace PostService.Database
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public PostDbContext(DbContextOptions<PostDbContext> options) : base(options)
         {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=localhost,7000;Database=PlayerService;User Id=sa;Password=HelloStudents!");
+            Database.EnsureCreated();
         }
+
     }
 }

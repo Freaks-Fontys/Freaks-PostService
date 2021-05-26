@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    freaks.service: postservice
+  name: postservice
+  namespace: freaks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      freaks.service: postservice
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        mindef.service: authservice
+    spec:
+      containers:
+      - image: fontysmindef/mindef-authservice:latest
+        imagePullPolicy: Always
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: ASPNETCORE_URLS
+          value: http://+:80       
+        name: mindef-authservice
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "1500m"
+      hostname: authservice
+      restartPolicy: Always
+status: {}

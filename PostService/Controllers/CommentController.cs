@@ -14,9 +14,9 @@ namespace PostService.Controllers
         PostDbContext _context;
         RabbitMQHandler mQHandler;
 
-        public CommentController()
+        public CommentController(PostDbContext context)
         {
-            _context = new PostDbContext();
+            _context = context;
             //mQHandler = new RabbitMQHandler("comment");
         }
 

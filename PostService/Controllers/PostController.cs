@@ -15,10 +15,10 @@ namespace PostService.Controllers
         RabbitMQHandler mQHandler;
 
 
-        public PostController()
+        public PostController(PostDbContext context)
         {
-            _context = new PostDbContext();
-            //mQHandler = new RabbitMQHandler("post");
+            _context = context;
+            mQHandler = new RabbitMQHandler("post");
         }
 
         [HttpGet("{id:length(24)}", Name = "GetPost")]
@@ -41,6 +41,7 @@ namespace PostService.Controllers
         public async Task<IActionResult> Create([FromBody] Post post)
         {
             _context.Posts.Add(post);
+            _context.SaveChanges();
 
             try
             {
