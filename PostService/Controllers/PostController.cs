@@ -3,6 +3,7 @@ using PostService.Database;
 using PostService.MessageQueue;
 using PostService.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PostService.Controllers
@@ -32,6 +33,23 @@ namespace PostService.Controllers
             catch (Exception ex)
             {
                 return BadRequest(id);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<Post[]> GetMultiple([FromQuery] string start, [FromQuery] string end)
+        {
+            try
+            {
+                Post[] posts = _context.Posts.Skip(int.Parse(start))
+                                             .Take(int.Parse(end))
+                                             .DefaultIfEmpty()
+                                             .ToArray();
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
             }
         }
 
